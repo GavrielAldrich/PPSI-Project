@@ -8,29 +8,32 @@ import ScrollToTop from "./components/ui/ScrollToTop";
 
 import { DataProvider } from "./context/dataContext";
 import { CartProvider } from "./context/CartContext";
+import { CartDataProvider } from "./context/CartDataContext";
 
 function App() {
   return (
-    <DataProvider>
-      <CartProvider>
-        <section id="home">
-          <div className="frame">
-            <ScrollToTop />
-            <div className="frame"></div>
-            <ModalCancelOrder />
-            <FilterSection />
+    <CartDataProvider>
+      <DataProvider>
+        <CartProvider>
+          <section id="home">
+            <div className="frame">
+              <ScrollToTop />
+              <div className="frame"></div>
+              <ModalCancelOrder />
+              <FilterSection />
 
-            {/* PRODUCT GOES DOWN HERE */}
-            <div>
-              <ProductContainer />
+              {/* PRODUCT GOES DOWN HERE */}
+              <div>
+                <ProductContainer />
+              </div>
+              <BotttomNavCart />
+              <Cart />
             </div>
-            <BotttomNavCart />
-            <Cart />
-          </div>
-        </section>
-        <Footer />
-      </CartProvider>
-    </DataProvider>
+          </section>
+          <Footer />
+        </CartProvider>
+      </DataProvider>
+    </CartDataProvider>
   );
 }
 

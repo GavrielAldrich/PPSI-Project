@@ -1,7 +1,8 @@
 import { useCart } from "../../context/CartContext";
+import { useCartData } from "../../context/CartDataContext";
 
 function Cart() {
-  const { isCartOpen, toggleCart } = useCart();
+  const { isCartOpen, toggleCart } = useCartData();
   return (
     <>
       {/* Conditionally render the <dialog> element */}

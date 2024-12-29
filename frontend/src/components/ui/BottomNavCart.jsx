@@ -1,11 +1,15 @@
-import { useData } from "../../context/dataContext";
-import { useCart } from "../../context/CartContext";
+import { useCartData } from "../../context/CartDataContext"; // Sesuaikan dengan path file Anda
 
-function BotttomNavCart() {
-  const { data } = useData();
-  const { toggleCart } = useCart();
+function BottomNavCart() {
+  // Menggunakan useCartData untuk mendapatkan data cart dan status
+  const { toggleCart, cartItems } = useCartData();
 
-  if (!data) return;
+  // Jika data tidak tersedia, tidak perlu merender komponen
+  if (!cartItems) return;
+
+  // Menghitung total harga dari cartItems
+  const total = cartItems.reduce((acc, item) => acc + item.price, 0);
+
   return (
     <div className="bottom-nav-cart">
       <div className="content">
@@ -44,10 +48,12 @@ function BotttomNavCart() {
                 ></path>
               </svg>
             </div>
-            <div className="badge badge-primary badge-md">1</div>
+            <div className="badge badge-primary badge-md">
+              {cartItems.length}
+            </div>
             {/* ANGKA AKAN BERUBAH TERGANTUNG BERAPA BANYAK ITEM */}
           </button>
-          <span> TOTAL : Rp&nbsp;10.455</span>
+          <span> TOTAL : Rp&nbsp;{total}</span>
         </div>
         <div>
           <button className="btn btn-primary">
@@ -72,4 +78,4 @@ function BotttomNavCart() {
   );
 }
 
-export default BotttomNavCart;
+export default BottomNavCart;
