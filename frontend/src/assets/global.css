@@ -81,6 +81,14 @@ table {
   border-collapse: collapse;
   border-color: inherit;
   text-indent: 0;
+  width: 90%;
+  margin: 0px 40px;
+}
+
+table, th, td{
+  margin-top: 20px;
+  border:1px solid black;
+  text-align: center;
 }
 button,
 input,
@@ -174,6 +182,10 @@ textarea {
 }
 input::placeholder,
 textarea::placeholder {
+  color: #9ca3af;
+  opacity: 1;
+}
+input:disabled{
   color: #9ca3af;
   opacity: 1;
 }
@@ -19785,3 +19797,5 @@ body {
     text-align: center;
   }
 }
+
+    

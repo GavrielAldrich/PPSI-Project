@@ -1,28 +1,76 @@
-export default function ProductCart() {
+import { useCartData } from "../../context/CartDataContext";
+
+export default function ProductCard({ item }) {
+  const { addToCart, cartItems } = useCartData(); // Mengambil cartItems dan addToCart dari context
+
+  // Ensure item has a valid quantity and price when adding it to the cart for the first time
+  const ensureQuantityInItem = (item) => {
+    const validQuantity = item.quantity && !isNaN(item.quantity) ? item.quantity : 1;
+    const validPrice = item.price && !isNaN(item.price) ? item.price : 0;
+    return {
+      ...item,
+      quantity: validQuantity,
+      subtotal: validQuantity * validPrice, // Ensure subtotal is valid
+    };
+  };
+
+  // Function to find an existing item in the cart
+  const findItemInCart = (itemId) => {
+    const items = Array.isArray(cartItems) ? cartItems : [];
+
+    return items.find(cartItem => cartItem.id === itemId); // Compare by item ID
+  };
+
+  // Handler for increasing the quantity
+  const increaseQuantity = () => {
+    const existingItem = findItemInCart(item.id);
+
+    if (existingItem) {
+      // If item exists, update its quantity and subtotal
+      const updatedItem = {
+        ...existingItem,
+        quantity: existingItem.quantity + 1, // Increase the quantity
+        subtotal: (existingItem.quantity + 1) * existingItem.price, // Recalculate subtotal
+      };
+
+      addToCart(updatedItem); // Update the cart with the new item
+    } else {
+      // If item doesn't exist in the cart, add it with quantity 1
+      const newItem = ensureQuantityInItem(item);
+
+      addToCart(newItem); // Add the new item to the cart
+    }
+  };
+
   return (
     <div className="product-item">
       <div className="card bg-base-100 shadow-xl" rel="preload">
         <figure>
           <img
-            src="https://myprofit.interactiveholic.net/myprofit/images/products/myresto-161001.jpg"
+            src={
+              item.image ||
+              "https://myprofit.interactiveholic.net/myprofit/images/products/myresto-161001.jpg"
+            }
             className="image-card"
             width="327"
             height="322"
             loading="lazy"
-            preload=""
-            placeholder='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"%3E%3Crect x="0" y="0" width="100%" height="100%" fill="%23f3f3f3" /%3E%3C/svg%3E'
           />
         </figure>
         <div className="card-body">
-          .
-          <div className="card-title">
-            <span className="min-h-[35px]">MIE GACOAN</span>
-            <p></p>
+          <div className="card-title">.
+            <span className="min-h-[35px]">{item.name}</span>
           </div>
           <div className="flex flex-row w-full justify-start gap-1 text-black items-center">
-            <span className="font-medium">Rp&nbsp;10.455</span>
+            <span className="font-medium">
+              Rp&nbsp;
+              {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+            </span>
           </div>
-          <div className="card-actions cursor-pointer">
+          <div
+            className="card-actions cursor-pointer"
+            onClick={increaseQuantity}
+          >
             <div className="btn-add-cart">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -1,8 +1,8 @@
-import React from "react";
 import useScrollToTop from "../../hooks/useScrollToTop"; // Hook untuk scroll ke atas
 import { useCartData } from "../../context/CartDataContext"; // Menggunakan context yang sudah digabungkan
 
 function ScrollToTop() {
+
   const { cartItems } = useCartData(); // Mengambil data dari CartDataContext
   const isVisible = useScrollToTop(); // Mengetahui apakah tombol scroll ke atas perlu ditampilkan
 
@@ -13,7 +13,7 @@ function ScrollToTop() {
 
   return (
     <button
-      className={`scroll-to-top ${cartItems && "mb-16"}`} // Menambahkan class mb-16 jika data ada
+      className={`scroll-to-top ${cartItems.items && cartItems.items.length && "mb-16"}`} // Menambahkan class mb-16 jika data ada
       style={{ display: isVisible ? "block" : "none" }} // Menampilkan tombol hanya jika diperlukan
       onClick={handleScrollToTop} // Menambahkan event handler untuk scroll
     >

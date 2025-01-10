@@ -1,7 +1,7 @@
-import { useData } from "../context/dataContext";
+import { useCartData } from "../context/CartDataContext";
 
 function Footer() {
-  const { data } = useData();
+  const { cartItems } = useCartData();
   return (
     <>
       <div className="flex justify-center">
@@ -10,7 +10,7 @@ function Footer() {
       <div className="flex justify-center">
         <div className="spacer"></div>
       </div>
-      <div className={`flex justify-center ${data && "mb-[65px]"}`}>
+      <div className={`flex justify-center ${cartItems.items && cartItems.items.length && "mb-[65px]"}`}>
         <section id="footer">
           <span>© 2024, InterActive. All rights reserved</span>
         </section>

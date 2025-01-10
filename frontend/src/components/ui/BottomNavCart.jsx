@@ -1,14 +1,16 @@
 import { useCartData } from "../../context/CartDataContext"; // Sesuaikan dengan path file Anda
+import { useNavigate } from "react-router-dom";
 
 function BottomNavCart() {
   // Menggunakan useCartData untuk mendapatkan data cart dan status
   const { toggleCart, cartItems } = useCartData();
+  const navigate = useNavigate();
 
   // Jika data tidak tersedia, tidak perlu merender komponen
-  if (!cartItems) return;
+  if (!cartItems.items || cartItems.items.length === 0) return;
 
   // Menghitung total harga dari cartItems
-  const total = cartItems.reduce((acc, item) => acc + item.price, 0);
+  const total = cartItems.total;
 
   return (
     <div className="bottom-nav-cart">
@@ -49,14 +51,23 @@ function BottomNavCart() {
               </svg>
             </div>
             <div className="badge badge-primary badge-md">
-              {cartItems.length}
+              {cartItems.items.length}
             </div>
             {/* ANGKA AKAN BERUBAH TERGANTUNG BERAPA BANYAK ITEM */}
           </button>
-          <span> TOTAL : Rp&nbsp;{total}</span>
+          <span>
+            {" "}
+            TOTAL : Rp&nbsp;
+            {total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+          </span>
         </div>
         <div>
-          <button className="btn btn-primary">
+          <button
+            className="btn btn-primary"
+            onClick={() => {
+              navigate("/checkout");
+            }}
+          >
             {" "}
             CHECKOUT{" "}
             <svg

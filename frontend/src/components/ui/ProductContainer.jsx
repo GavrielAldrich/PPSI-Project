@@ -1,6 +1,9 @@
-import ProductCart from "./ProductCard";
+import ProductCard from "./ProductCard";
+import useProducts from "../../hooks/useProducts";
 
-export default function ProductContainer() {
+export default function ProductContainer({ query }) {
+  const products = useProducts(query);
+
   return (
     <div>
       <div>
@@ -20,16 +23,15 @@ export default function ProductContainer() {
                   fill="#DA2424"
                 ></path>
               </svg>
-              <span>Mie</span>
+              <span>{query.charAt(0).toUpperCase() + query.slice(1)}</span>
             </div>
-            <button className="link-see-all">See all</button>
           </div>
 
           <div className="product">
-            <ProductCart />
-            <ProductCart />
-            <ProductCart />
-            <ProductCart />
+            {products &&
+              products.map((productData, index) => {
+                return <ProductCard key={index} item={productData} />;
+              })}
           </div>
         </div>
       </div>

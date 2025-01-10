@@ -1,38 +1,39 @@
-import BotttomNavCart from "./components/ui/BottomNavCart";
-import Cart from "./components/ui/Cart";
-import FilterSection from "./components/ui/FilterSection";
-import Footer from "./components/Footer";
-import ModalCancelOrder from "./components/ui/ModalCancelOrder";
-import ProductContainer from "./components/ui/ProductContainer";
-import ScrollToTop from "./components/ui/ScrollToTop";
+import Home from "./pages/user_pages/Home";
+import Bakso from "./pages/user_pages/Bakso";
+import Mie from "./pages/user_pages/Mie";
+import Checkout from "./pages/user_pages/Checkout";
 
-import { DataProvider } from "./context/dataContext";
-import { CartProvider } from "./context/CartContext";
+import Orders from "./pages/admin_pages/Orders";
+import Menus from "./pages/admin_pages/Menus";
+import Login from "./pages/admin_pages/Login";
+import Register from "./pages/admin_pages/Register";
+import Menu_Form from "./pages/admin_pages/Menu_Form";
+import View_Order from "./pages/admin_pages/View_Order";
+
+import { BrowserRouter, Routes, Route} from "react-router-dom";
 import { CartDataProvider } from "./context/CartDataContext";
 
 function App() {
   return (
     <CartDataProvider>
-      <DataProvider>
-        <CartProvider>
-          <section id="home">
-            <div className="frame">
-              <ScrollToTop />
-              <div className="frame"></div>
-              <ModalCancelOrder />
-              <FilterSection />
+      <BrowserRouter>
+        <Routes>
+          {/* ADMIN ROUTE - Protected Routes */}
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/menus" element={<Menus />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/menuform/:id" element={<Menu_Form />} />
+          <Route path="/menuform" element={<Menu_Form />} />
+          <Route path="/vieworder/:id" element={<View_Order />} />
 
-              {/* PRODUCT GOES DOWN HERE */}
-              <div>
-                <ProductContainer />
-              </div>
-              <BotttomNavCart />
-              <Cart />
-            </div>
-          </section>
-          <Footer />
-        </CartProvider>
-      </DataProvider>
+          {/* USER ROUTE */}
+          <Route path="/" element={<Home />} />
+          <Route path="/bakso" element={<Bakso />} />
+          <Route path="/mie" element={<Mie />} />
+          <Route path="/checkout" element={<Checkout />} />
+        </Routes>
+      </BrowserRouter>
     </CartDataProvider>
   );
 }
