@@ -10,7 +10,7 @@ import Register from "./pages/admin_pages/Register";
 import Menu_Form from "./pages/admin_pages/Menu_Form";
 import View_Order from "./pages/admin_pages/View_Order";
 
-import { BrowserRouter, Routes, Route} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CartDataProvider } from "./context/CartDataContext";
 
 function App() {
@@ -19,6 +19,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* ADMIN ROUTE - Protected Routes */}
+          <Route path="/admin" element={<Navigate to="/orders" />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/menus" element={<Menus />} />
           <Route path="/login" element={<Login />} />

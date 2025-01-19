@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 
 export default function View_Order() {
   const [orderData, setOrderData] = useState();
+  const [paymentMethod, setPaymentMethod] = useState();
   const navigate = useNavigate();
   const { id } = useParams();
   const token = Cookies.get("auth_token");
@@ -19,6 +20,7 @@ export default function View_Order() {
           },
         });
         setOrderData(response.data.data);
+        setPaymentMethod(response.data.data.paymentMethod);
       } catch (error) {
         console.log("Error while fetching order data", error);
       }
@@ -28,10 +30,43 @@ export default function View_Order() {
 
   // Handle logout
   const handleLogout = () => {
-    Cookies.remove("auth_token"); // Correct cookie removal
-    navigate("/login"); // Redirect to login page after logout
+    Cookies.remove("auth_token"); 
+    navigate("/login"); 
   };
 
+  const handlePaymentMethodChange = (e) => {
+    const { name, value } = e.target;
+    setOrderData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleComplete = async () => {
+    const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_KEY;
+
+    if (orderData.paymentMethod === "Unsettled") {
+      return alert(`Payment method cannot be ${orderData.paymentMethod}`);
+    }
+    await axios.patch(
+      `${API_BASE_URL}/orders/${id}`,
+      {
+        status: "completed",
+        paymentMethod: `${orderData.paymentMethod}`,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    alert("Order Completed");
+    window.location.reload();
+    try {
+    } catch (error) {
+      console.log(error);
+      alert(
+        "Something went wrong when completing task, please reload the page and try again."
+      );
+    }
+  };
   return (
     <div id="admin">
       <header>
@@ -132,6 +167,7 @@ export default function View_Order() {
                 ))}
               </div>
             </div>
+
             <div className="form-group">
               <label htmlFor="total">Total: </label>
               <input
@@ -146,6 +182,48 @@ export default function View_Order() {
                 disabled
               />
             </div>
+            <div className="form-group">
+              <label htmlFor="paymentMethod">Payment Method:</label>
+              {paymentMethod == "Unsettled" ? (
+                <>
+                  <select
+                    name="paymentMethod"
+                    id="category"
+                    onChange={handlePaymentMethodChange}
+                  >
+                    <option value={""}>Pilih Metode Pembayaran</option>
+                    <option value={"qris"}>Qris</option>
+                    <option value={"cash"}>Cash</option>
+                  </select>
+                </>
+              ) : (
+                <input
+                  type="text"
+                  value={paymentMethod ? paymentMethod : "Loading"}
+                  disabled
+                />
+              )}
+            </div>
+            {paymentMethod == "Unsettled" ? (
+              <button
+                type="submit"
+                onClick={handleComplete}
+                style={{
+                  marginTop: "20px",
+                  cursor: "pointer",
+                  padding: "5px 10px",
+                  marginRight: "10px",
+                  backgroundColor: "#4CAF50",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                }}
+              >
+                Complete Order
+              </button>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       </div>

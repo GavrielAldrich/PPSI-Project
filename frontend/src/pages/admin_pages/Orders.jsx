@@ -39,7 +39,7 @@ export default function Orders() {
       fetchOrders();
     }
   }, [navigate]); // The empty dependency array ensures this runs only once when the component mounts
-
+  console.log(orders);
   // Handle Action
   const handleAction = async (code) => {
     const token = Cookies.get("auth_token"); // Get the token again in case it's needed
@@ -149,6 +149,7 @@ export default function Orders() {
                   <th>Customer Name</th>
                   <th>Transaction Code</th>
                   <th>Total Price</th>
+                  <th>Payment Method</th>
                   <th>Order Status</th>
                   <th>Action</th>
                 </tr>
@@ -165,8 +166,28 @@ export default function Orders() {
                         .toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
                     </td>
-                    <td>{order.order_status}</td>
-
+                    <td>{order.payment_method}</td>
+                    <td>
+                      <button
+                        className="button-remove"
+                        style={{
+                          cursor: "default",
+                          padding: "5px 10px",
+                          marginRight: "10px",
+                          backgroundColor:
+                            order.order_status === "Pending"
+                              ? "#F7CB73"
+                              : "#4CAF50", // Green color for "Completed"
+                          color: "white",
+                          border: "none",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        {order.order_status === "Pending"
+                          ? "Pending"
+                          : "Completed"}
+                      </button>
+                    </td>
                     <td>
                       <button
                         onClick={() => handleView(order.transaction_code)} // Pass order ID to handleAction
@@ -182,30 +203,6 @@ export default function Orders() {
                         }}
                       >
                         View Order
-                      </button>
-                      <button
-                        onClick={() => handleAction(order.transaction_code)} // Pass order ID to handleAction
-                        className="button-remove"
-                        style={{
-                          cursor:
-                            order.order_status === "Pending"
-                              ? "pointer"
-                              : "not-allowed", // Correct cursor style
-                          padding: "5px 10px",
-                          marginRight: "10px",
-                          backgroundColor:
-                            order.order_status === "Pending"
-                              ? "#4CAF50"
-                              : "grey", // Green color for "Completed"
-                          color: "white",
-                          border: "none",
-                          borderRadius: "4px",
-                        }}
-                        disabled={order.order_status !== "Pending"} // Disable button if order status is not "Pending"
-                      >
-                        {order.order_status === "Pending"
-                          ? "Complete"
-                          : "Completed"}
                       </button>
                     </td>
                   </tr>
